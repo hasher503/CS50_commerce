@@ -1,0 +1,41 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    Closed Auctions
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h2>Closed Auctions</h2>
+    <hr>
+    <!-- If no auctions are closed yet -->
+    {% if not listings %}
+            <div class="alert alert-primary">
+                No auctions have been closed yet!
+            </div>
+    {% else %}
+        {% for listing in listings %}
+            <a href="{% url 'item' item_id=listing.pk %}" class="text-dark">
+                <div class="container pt-3 my-3 bg-white border rounded">
+                    <div class="row">
+                        {% if listing.img_url %}
+                            <div class="col-sm-3">
+                                <img src="{{ listing.img_url }}" class="img-responsive float-left" style="max-width: 200px;">
+                            </div>
+                        {% endif %}
+                        <div class="col-lg-9">
+                            <h3 class="text-primary">
+                                {{ listing.title }}
+                            </h3>
+                            <h6> <b>Current Price:</b> {{ listing.price }} </h6>
+                            <p>{{ listing.description }}
+                            <p>posted by {{ listing.seller }}
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    {% endif %}
+    <br>
+</div>
+{% endblock %}

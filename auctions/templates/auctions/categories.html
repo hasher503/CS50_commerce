@@ -1,0 +1,56 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    Categories
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+    <!-- List of all categories to chose -->
+        {% if categories %}
+        <h2>Categories</h2>
+        <hr>
+            <ul>
+                {% for category in categories %}
+                    <li><h2> <a href="{% url 'category_view2' cat=category.category %}"> {{category}} </a></h2></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% if one_category %}
+        <h2> Category: {{ one_category }} </h2>
+        <hr>
+    {% endif %}
+    <!-- Specific items in the category, if passed in -->
+    {% if cat_items %}
+        {% for listing in cat_items %}
+        <a href="{% url 'item' item_id=listing.pk %}" class="text-dark">
+            <div class="container pt-3 my-3 bg-white border rounded">
+                <div class="row">
+                    {% if listing.img_url %}
+                        <div class="col-sm-3">
+                            <img src="{{ listing.img_url }}" class="img-responsive float-left" style="max-width: 200px;">
+                        </div>
+                    {% endif %}
+                    <div class="col-lg-9">
+                        <h3 class="text-primary">
+                            {{ listing.title }}
+                        </h3>
+                        <h6><b>Current Price:</b> {{ listing.price }} </h6>
+                        <p>{{ listing.description }}
+                        <p>posted by {{ listing.seller }}
+                    </div>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+    {% else %}
+    <!-- If no items exist in the category yet -->
+        {% if one_category %}
+            <div class="alert alert-primary">
+                No items in this category yet.
+            </div>
+        {% endif %}
+    {% endif %}
+
+    </div>
+{% endblock %}

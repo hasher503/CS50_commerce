@@ -1,0 +1,128 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    Auction Item
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <!-- Seller: close auction section -->
+        {% if item.seller == request.user and item.active %}
+            <div class="alert alert-secondary">
+                You are the seller. <br>
+                <form action="{% url 'close_item' item_id=item.pk %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Close This Auction" class="btn btn-warning float-center">
+                </form>
+            </div>
+        {% endif %}
+        <!-- If auction is CLOSED -->
+        {% if not item.active %}
+            <div class="alert alert-danger">
+                This auction is closed.
+            </div>
+            <!-- If auction is closed and this user is the WINNER -->
+            {% if item.winner == request.user %}
+                <div class="alert alert-warning">
+                    Congratulations! You won this auction. You owe {{ item.seller }} <b>${{ item.price }}</b>.
+                </div>
+            {% endif %}
+            <!-- If auction is closed and this user is the SELLER-->
+            {% if item.seller == request.user %}
+                <div class="alert alert-warning">
+                    <b>{{ item.winner }}</b> won this auction and owes you <b>${{ item.price }}</b>.
+                </div>
+            {% endif %}
+        {% endif %}
+        <!-- Item Description Section -->
+        <div class="row">
+            {% if item.img_url %}
+                <div class="col">
+                    <img src="{{item.img_url}}" class="img-responsive float-left" style="max-width: 400px;">
+                </div>
+            {% endif %}
+            <div class="col">
+                <h1>{{ item.title }}</h1>
+                <p>
+                {{ item.description }}
+                <p>
+                <b>Category:</b> {{ item.category }}
+                <p>
+                <b>Posted by:</b> {{ item.seller }}
+                <p>
+                <b>Current Price:</b> ${{ item.price }}
+            </div>
+        </div>
+        <hr>
+        <!-- Bid Section -->
+        {% if item.active %}
+            <div class="row">
+                <div class="col">
+                    <h3>Bid</h3>
+                    {% if bidmessage %}
+                        <div class="alert alert-danger"> {{ bidmessage }} </div>
+                    {% endif %}
+                    {{ bidnum }} bid(s) so far.
+                    <div class="form-group">
+                        <form action="{% url 'item' item_id=item.pk %}" method="post">
+                            {% csrf_token %}
+                            {{ bidform.as_p }}
+                            <input type="submit" value="Submit Bid" class="btn btn-primary">
+                        </form>
+                    </div>
+                </div>
+            <!-- Watchlist Section -->
+                <div class="col">
+                    <h3>Watchlist</h3>
+                    <form action="{% url 'watch_item' item_id=item.pk %}" method="post">
+                    {% csrf_token %}
+                        {% if onlist %}
+                            This item is on your watchlist.<br><br>
+                            <input type="submit" value="Remove from Watchlist" class="btn btn-danger">
+                        {% else %}
+                            This item is not on your watchlist.<br><br>
+                            <input type="submit" value="Add to Watchlist" class="btn btn-danger">
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+            <hr>
+        {% endif %}
+        <!-- Comments Form -->
+        {% if item.active %}
+            <div class="row">
+                <div class="col">
+                    <h3> Leave A Comment </h3>
+                    <div class="form-group">
+                        <form action="{% url 'comment' item_id=item.pk %}" method="post">
+                            {% csrf_token %}
+                            {{ commentform.as_p }}
+                            <input type="submit" value="Comment" class="btn btn-warning">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        {% endif %}
+        <!-- Previous Comments -->
+        <div class="row">
+            <div class="col">
+                <h3> Comments </h3>
+            </div>
+        </div>
+        {% if comments %}
+            {% for each in comments %}
+                <div class="container pt-3 my-3 bg-white border rounded">
+                    <b>{{ each.commenter }}</b> commented on {{ each.datetime }}: "{{ each.comment }}"
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="row">
+                <div class="col">
+                    No comments on this item yet!
+                </div>
+            </div>
+        {% endif %}    
+    <br> 
+    </div>
+{% endblock %}
