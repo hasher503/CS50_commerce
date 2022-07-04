@@ -11,11 +11,10 @@ An eBay-ish e-commerce site where users can create auction listings, view all us
 
 ## Video Demo
 
-<p align="center>
 <a href="https://youtu.be/XIiaO75g8oQ">
 <img src="vid.png" alt="video demo" width="600px">
 </a>
-</p>
+
 ---
 
 Assignment starter code provided by Harvard's CS50. You can read the assignment specification on [CS50's OpenCourseWare](https://cs50.harvard.edu/web/2020/projects/2/commerce/)
