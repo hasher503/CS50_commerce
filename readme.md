@@ -11,7 +11,7 @@ An eBay-ish e-commerce site where users can create auction listings, view all us
 
 ## Video Demo
 
-<a href="https://youtu.be/XIiaO75g8oQ" target="_blank">
+<a href="https://youtu.be/XIiaO75g8oQ">
 <img src="vid.png" alt="video demo" width="600px">
 </a>
 
